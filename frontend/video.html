@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Watch Video</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+</head>
+<body class="bg-light">
+
+  <nav class="navbar navbar-dark bg-dark mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="../videos.html">TrainVid</a>
+
+    <div>
+      <a href="../videos.html" class="btn btn-outline-light btn-sm me-2">
+        Home
+      </a>
+      <a href="admin/upload.html" class="btn btn-warning btn-sm me-2">
+  Admin Panel
+</a>
+
+      <button class="btn btn-outline-danger btn-sm" onclick="logout()">
+        Logout
+      </button>
+    </div>
+  </div>
+</nav>
+
+
+  <div class="container mt-4">
+    <h3 id="videoTitle"></h3>
+    <p id="videoDesc" class="text-muted"></p>
+
+    <video id="videoPlayer" width="100%" controls class="mb-4">
+      Your browser does not support video playback.
+    </video>
+
+    <h5>Predefined Questions</h5>
+    <ul class="list-group" id="questionList"></ul>
+  </div>
+
+  <script src="js/video.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
