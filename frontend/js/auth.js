@@ -1,39 +1,43 @@
-const API_BASE = "http://127.0.0.1:8000";
+const API = "http://127.0.0.1:8000";
 
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  console.log("AUTH.JS LOADED — FORM DATA VERSION");
+
   e.preventDefault();
 
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
+  const errorBox = document.getElementById("error");
 
-  const formData = new FormData();
-  formData.append("email", email);
-  formData.append("password", password);
+  errorBox.innerText = "";
 
   try {
-    const res = await fetch(`${API_BASE}/auth/login`, {
+    // ✅ BACKEND EXPECTS FORM DATA
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+
+    const res = await fetch(`${API}/auth/login`, {
       method: "POST",
-      body: formData,
+      body: formData
+      // ❌ DO NOT set Content-Type manually
     });
+
+    if (!res.ok) {
+      errorBox.innerText = "❌ Invalid email or password";
+      return;
+    }
 
     const data = await res.json();
 
-    if (!res.ok) {
-      throw new Error(data.detail || "Login failed");
-    }
-
-    // Save token
+    // Save JWT
     localStorage.setItem("token", data.access_token);
 
-    // TEMP: send everyone to videos page
-    window.location.href = "videos.html";
+    // Redirect after login
+    window.location.href = "/frontend/videos.html";
 
   } catch (err) {
-    document.getElementById("error").innerText = "Login failed";
     console.error(err);
+    errorBox.innerText = "❌ Server error. Try again.";
   }
 });
-function logout() {
-  localStorage.clear();
-  window.location.href = "../login.html";
-}

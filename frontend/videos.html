@@ -34,6 +34,23 @@
   <div class="container mt-4">
     <h3 class="mb-3">Available Training Videos</h3>
 
+    <div class="mb-3">
+  <div class="d-flex justify-content-between">
+    <span id="progressText" class="fw-semibold">Progress</span>
+    <span id="progressPercent" class="text-muted">0%</span>
+  </div>
+
+  <div class="progress mt-1" style="height: 8px;">
+    <div
+      id="progressBar"
+      class="progress-bar bg-success"
+      role="progressbar"
+      style="width: 0%">
+    </div>
+  </div>
+</div>
+
+
     <div class="row" id="videoList">
       <!-- Videos will be injected here -->
     </div>

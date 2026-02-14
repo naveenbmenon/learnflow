@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime , Boolean
 from sqlalchemy.sql import func
 from app.database import Base
 
@@ -10,4 +10,6 @@ class Video(Base):
     description = Column(String)
     video_path = Column(String, nullable=False)
     uploaded_by = Column(Integer, ForeignKey("users.id"))
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    # ✅ SOFT DELETE FLAG
+    is_active = Column(Boolean, default=True)
+    

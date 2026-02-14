@@ -13,8 +13,9 @@ function showStatus(message, type = "success") {
 
 function logout() {
   localStorage.clear();
-  window.location.href = "../login.html";
+  window.location.href = "/frontend/login.html";
 }
+
 
 async function loadVideos() {
   try {
@@ -29,47 +30,54 @@ async function loadVideos() {
     list.innerHTML = "";
 
     videos.forEach(v => {
-      const li = document.createElement("li");
-      li.className = "list-group-item d-flex justify-content-between align-items-center";
+  const li = document.createElement("li");
+  li.className = "list-group-item d-flex justify-content-between align-items-center";
 
-      li.innerHTML = `
-        <span>${v.title}</span>
-        <div>
-          <a href="edit.html?id=${v.id}" class="btn btn-sm btn-secondary me-1">
-            Edit
-          </a>
-          <button class="btn btn-sm btn-danger" onclick="deleteVideo(${v.id})">
-            Delete
-          </button>
-        </div>
-      `;
+  li.innerHTML = `
+    <span>${v.title}</span>
+    <div>
+      <a href="edit.html?id=${v.id}" class="btn btn-sm btn-secondary me-2">
+        Edit
+      </a>
+      <button
+        class="btn btn-sm btn-warning"
+        onclick="deactivateVideo(${v.id})"
+      >
+        Deactivate
+      </button>
+    </div>
+  `;
 
-      list.appendChild(li);
-    });
+  list.appendChild(li);
+});
+
+
 
   } catch {
     showStatus("❌ Failed to load videos", "danger");
   }
 }
 
-async function deleteVideo(id) {
-  if (!confirm("Are you sure you want to delete this video?")) return;
+async function deactivateVideo(id) {
+  if (!confirm("Deactivate this video?")) return;
 
   try {
-    const res = await fetch(`${API}/videos/${id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` }
+    const res = await fetch(`${API}/videos/${id}/deactivate`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     });
 
     if (!res.ok) throw new Error();
 
-    showStatus("🗑 Video deleted successfully");
+    showStatus("✅ Video deactivated");
     loadVideos();
-
   } catch {
-    showStatus("❌ Failed to delete video", "danger");
+    showStatus("❌ Failed to deactivate video", "danger");
   }
 }
+
 
 document.getElementById("uploadForm").addEventListener("submit", async e => {
   e.preventDefault();

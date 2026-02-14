@@ -7,8 +7,9 @@ if (!token) {
 
 function logout() {
   localStorage.clear();
-  window.location.href = "login.html";
+  window.location.href = "/frontend/login.html";
 }
+
 
 // Get video_id from URL
 const params = new URLSearchParams(window.location.search);

@@ -1,5 +1,10 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
+
+
+from app.progress.models import UserVideoProgress
+from app.progress.routes import router as progress_router
 
 from app.database import Base, engine, SessionLocal
 from app.users.models import User
@@ -42,6 +47,7 @@ Base.metadata.create_all(bind=engine)
 app.include_router(auth_router)
 app.include_router(video_router)
 app.include_router(question_router)
+app.include_router(progress_router)
 
 # Static folders
 app.mount("/media", StaticFiles(directory="videos"), name="media")
@@ -75,3 +81,12 @@ def create_test_users():
     db.close()
 
 create_test_users()
+
+@app.get("/login.html")
+def redirect_login():
+    return RedirectResponse(url="/frontend/login.html")
+
+
+@app.get("/favicon.ico")
+def favicon():
+    return RedirectResponse(url="/frontend/favicon.ico")

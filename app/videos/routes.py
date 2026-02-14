@@ -59,9 +59,8 @@ def list_videos(
     db: Session = Depends(get_db),
     user=Depends(get_current_user)
 ):
-    print("LIST DB:", db.bind.url)
-
-    return db.query(Video).all()
+    videos = db.query(Video).filter(Video.is_active == True).all()
+    return videos
 
 
 @router.get("/{video_id}")
@@ -70,10 +69,15 @@ def get_video(
     db: Session = Depends(get_db),
     user=Depends(get_current_user)
 ):
-    video = db.query(Video).filter(Video.id == video_id).first()
+    video = (
+        db.query(Video)
+        .filter(Video.id == video_id, Video.is_active == True)
+        .first()
+    )
     if not video:
         raise HTTPException(status_code=404, detail="Video not found")
     return video
+
 
 @router.put("/{video_id}")
 def update_video(
@@ -126,10 +130,18 @@ def delete_question(
     db.commit()
     return {"message": "Question deleted"}
 
-@router.delete("/{video_id}")
-def delete_video(
+
+@router.put("/{video_id}/deactivate")
+def deactivate_video(
     video_id: int,
+    db: Session = Depends(get_db),
     admin=Depends(admin_required)
 ):
-    print("🔥 DELETE ROUTE HIT FOR VIDEO:", video_id)
-    return {"message": "delete route reached"}
+    video = db.query(Video).filter(Video.id == video_id).first()
+    if not video:
+        raise HTTPException(status_code=404, detail="Video not found")
+
+    video.is_active = False
+    db.commit()
+
+    return {"message": "Video deactivated successfully"}
